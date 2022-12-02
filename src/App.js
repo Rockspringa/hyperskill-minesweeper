@@ -1,31 +1,25 @@
 import React from 'react';
-import logo from './bomb.svg';
+import logo from './logo.svg';
 import './App.css';
-
-import Counter from "./info/Counter";
-import Reset from "./info/Reset";
-import Timer from "./info/Timer";
-
-import Field from "./game/Field";
 
 function App() {
   return (
-    <>
-      <header>
-        <h2>Minesweeper</h2>
-        <img src={logo} className="logo" alt="logo"/>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
-
-      <main>
-        <div id="info">
-          <Counter/>
-          <Reset/>
-          <Timer/>
-        </div>
-
-        <Field/>
-      </main>
-    </>
+    </div>
   );
 }
 
