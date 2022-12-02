@@ -10,7 +10,7 @@ import Field from "./game/Field";
 
 function App() {
   return (
-    <div>
+    <>
       <header>
         <h2>Minesweeper</h2>
         <img src={logo} className="logo" alt="logo"/>
@@ -25,7 +25,7 @@ function App() {
 
         <Field/>
       </main>
-    </div>
+    </>
   );
 }
 

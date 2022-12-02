@@ -2,10 +2,21 @@ import React from 'react';
 import Row from "./Row";
 import './Field.css';
 
-const keys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const getRowsData = () => {
+  const bombsPerRow = new Array(9).fill(0);
+
+  for (let i = 0; i < 10; i++) {
+    const index = Math.floor(Math.random() * 9);
+    bombsPerRow[index]++;
+  }
+
+  return bombsPerRow;
+}
 
 function Field() {
-  const rows = keys.map((key) => <Row key={key}/>);
+  const rowsData = getRowsData();
+  const rows = rowsData.map((bombsAmount, index) => <Row key={index} bombsAmount={bombsAmount}/>);
+
   return (
     <div id="field">
       {rows}

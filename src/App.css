@@ -1,50 +1,50 @@
 #root {
-  display: flex;
-  justify-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
 
-  width: 100vw;
-  height: 100vh;
-  margin: auto;
-}
+    width: fit-content;
+    margin: 2.5em auto;
+    padding: 0 20px 10px;
 
-#root > div {
-  margin: auto;
+    box-shadow: 0 0 10px 10px #882222;
+    border-radius: 20px;
 }
 
 header {
-  display: flex;
+    display: flex;
 
-  width: fit-content;
-  margin: auto;
+    width: fit-content;
+    margin: auto;
 }
 
 #info, #info * {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 img {
-  height: 25px;
-  margin: auto 10px;
-  pointer-events: none;
+    height: 25px;
+    margin: auto 10px;
+    pointer-events: none;
 }
 
 img:not(.logo) {
-  height: 15px;
-  margin: auto;
+    height: 15px;
+    margin: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+    .logo {
+        animation: logo-spin infinite 20s linear;
+    }
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
