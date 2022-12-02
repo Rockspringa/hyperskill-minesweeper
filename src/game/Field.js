@@ -2,20 +2,10 @@ import React from 'react';
 import Row from "./Row";
 import './Field.css';
 
-const getRowsData = () => {
-  const bombsPerRow = new Array(9).fill(0);
-
-  for (let i = 0; i < 10; i++) {
-    const index = Math.floor(Math.random() * 9);
-    bombsPerRow[index]++;
-  }
-
-  return bombsPerRow;
-}
-
-function Field() {
-  const rowsData = getRowsData();
-  const rows = rowsData.map((bombsAmount, index) => <Row key={index} bombsAmount={bombsAmount}/>);
+function Field(props) {
+  const rows = props.gameFlow.cells.map(
+    (_, index) => <Row key={72 + index} row={index} gameFlow={props.gameFlow}/>
+  );
 
   return (
     <div id="field">
@@ -24,4 +14,4 @@ function Field() {
   );
 }
 
-export default Field;
+export default React.memo(Field, () => true);

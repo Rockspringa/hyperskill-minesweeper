@@ -1,12 +1,11 @@
 import React from 'react';
 import bomb from '../bomb.svg';
 
-function Counter() {
-  let bombs = 10;
+function Counter(props) {
   return (
     <div>
       <img src={bomb} alt="bomb counter"/>
-      <p>{bombs}</p>
+      <p>{props.bombs}</p>
     </div>
   );
 }

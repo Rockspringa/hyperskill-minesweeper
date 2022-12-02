@@ -1,9 +1,11 @@
 import React from 'react';
 import reset from './emoji.svg';
 
-function Reset() {
+function Reset(props) {
   return (
-    <img src={reset} alt="bomb counter"/>
+    <div onClick={props.resetGame}>
+      <img src={reset} alt="bomb counter"/>
+    </div>
   );
 }
 
