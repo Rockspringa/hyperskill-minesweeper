@@ -1,0 +1,16 @@
+#field {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    background: black;
+
+    width: 15px;
+    height: 15px;
+    margin: 3px;
+}
