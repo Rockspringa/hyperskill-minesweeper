@@ -1,82 +1,56 @@
-import React, {useState} from 'react';
-import logo from './bomb.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-import Counter from "./info/Counter";
-import Reset from "./info/Reset";
-import Timer from "./info/Timer";
+import Header from "./components/Header";
+import Info from "./components/Info";
+import Field from "./components/game/Field";
 
-import Field from "./game/Field";
-
-const getRowsData = () => {
-  const bombsPerRow = new Array(9).fill(0);
-
-  for (let i = 0; i < 10; i++) {
-    const index = Math.floor(Math.random() * 9);
-    bombsPerRow[index]++;
-  }
-
-  return bombsPerRow;
-}
-
-const getCellsData = (bombsAmount) => {
-  const cellBombs = new Array(8).fill(false);
-  let bombs = 0;
-
-  while (bombs < bombsAmount) {
-    const index = Math.floor(Math.random() * 8);
-
-    if (!cellBombs[index]) {
-      cellBombs[index] = true;
-      bombs++;
-    }
-  }
-
-  return cellBombs;
-}
+const defaultBombs = 10;
 
 function App() {
   const [defaultState, setDefaultState] = useState(true);
-  const [bombs, setBombs] = useState(10);
-  const [field, setField] = useState(true);
+  const [bombs, setBombs] = useState(defaultBombs);
   const [stop, setStop] = useState(true);
-
-  const gameFlow = {
-    cells: getRowsData().map(bombsAmount => getCellsData(bombsAmount)),
-    stop: false,
-    setBombs,
-    bombs,
-    bombExploded: () => setStop(true),
-    beginGame: defaultState ? () => {
-      setDefaultState(false);
-      setStop(false);
-    } : undefined,
-  };
+  const [game, setGame] = useState(0);
 
   const resetGame = () => {
+    if (defaultState) {
+      return;
+    }
+
     setDefaultState(true);
-    setBombs(10);
-    setField(!field);
+    setBombs(defaultBombs);
     setStop(true);
-    gameFlow.cells = getRowsData().map(bombsAmount => getCellsData(bombsAmount));
-    gameFlow.stop = false;
-  }
+    setGame((game) => game + 1);
+  };
+
+  const beginGame = (callback) => {
+    if (!defaultState) {
+      return;
+    }
+    setDefaultState(false);
+    setStop(false);
+    callback();
+  };
 
   return (
     <>
-      <header>
-        <h2>Minesweeper</h2>
-        <img src={logo} className="logo" alt="logo"/>
-      </header>
-
+      <Header />
+      <Info
+        stop={stop}
+        bombs={bombs}
+        resetGame={resetGame}
+        defaultState={defaultState}
+      />
       <main>
-        <div id="info">
-          <Counter bombs={bombs}/>
-          <Reset resetGame={resetGame}/>
-          <Timer defaultState={defaultState} stopped={stop}/>
-        </div>
-
-        <Field gameFlow={gameFlow} key={-field}/>
+        <Field
+          stop={stop}
+          bombs={bombs}
+          explode={() => setStop(true)}
+          setBombs={setBombs}
+          onFirstClick={beginGame}
+          key={game}
+        />
       </main>
     </>
   );
