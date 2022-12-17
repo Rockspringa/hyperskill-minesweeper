@@ -13,8 +13,8 @@ const Cell = ({
   hasBomb,
   setBombs,
   activated,
-  propagate,
-  firstClick
+  stepOnCell,
+  firstClick,
 }) => {
   const [state, setState] = useState(stateClasses.default);
 
@@ -41,7 +41,7 @@ const Cell = ({
     }
 
     setState(hasBomb ? stateClasses.exploded : stateClasses.activated);
-    propagate();
+    stepOnCell();
   });
 
   const flag = actionWrapper((event) => {
@@ -56,12 +56,13 @@ const Cell = ({
         setState(stateClasses.flagged);
         return bombs - 1;
       }
+      return bombs;
     });
   });
 
   return (
     <div className={state} onClick={activate} onContextMenu={flag}>
-      <h6>{state === stateClasses.activated ? bombs : ""}</h6>
+      <h6>{state === stateClasses.activated ? bombs || "" : ""}</h6>
     </div>
   );
 };

@@ -6,6 +6,8 @@ import Info from "./components/Info";
 import Field from "./components/game/Field";
 
 const defaultBombs = 10;
+const defaultRows = 9;
+const defaultCols = 8;
 
 function App() {
   const [defaultState, setDefaultState] = useState(true);
@@ -45,8 +47,10 @@ function App() {
       <main>
         <Field
           stop={stop}
+          rows={defaultRows}
+          cols={defaultCols}
           bombs={bombs}
-          explode={() => setStop(true)}
+          gameOver={() => setStop(true)}
           setBombs={setBombs}
           onFirstClick={beginGame}
           key={game}

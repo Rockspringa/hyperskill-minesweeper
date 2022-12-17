@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-let timer;
+let secondsTimer;
+let minutesTimer;
 
 const Timer = ({ stopped, defaultState }) => {
   const [seconds, setSeconds] = useState(0);
@@ -8,18 +9,16 @@ const Timer = ({ stopped, defaultState }) => {
 
   useEffect(() => {
     if (!stopped) {
-      timer = setInterval(() => {
-        setSeconds((sec) => {
-          if (sec === 59) {
-            setMinutes((min) => min + 1);
-            return 0;
-          }
-          return sec + 1;
-        });
-      }, 1000);
+      secondsTimer = setInterval(() => setSeconds((sec) => sec + 1), 1000);
+      minutesTimer = setInterval(() => {
+        setMinutes((min) => min + 1);
+        setSeconds(0);
+      }, 60000);
     } else {
-      clearInterval(timer);
-      timer = undefined;
+      clearInterval(secondsTimer);
+      clearInterval(minutesTimer);
+      secondsTimer = undefined;
+      minutesTimer = undefined;
     }
   }, [stopped]);
 
