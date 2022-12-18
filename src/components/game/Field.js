@@ -4,14 +4,15 @@ import Cell from "./Cell";
 import "./Field.css";
 
 import MinesField from "../../model/MinesField";
+import gameStates from "../../model/GameStates";
 
 const Field = ({
-  stop,
   rows,
   cols,
   bombs,
   gameOver,
   setBombs,
+  gameState,
   onFirstClick,
 }) => {
   const [minesField, setMinesField] = useState(new MinesField({ rows, cols }));
@@ -21,25 +22,26 @@ const Field = ({
       minesField.stepOnCell(index);
       setMinesField((minesField) => new MinesField(minesField));
 
-      if (cell.hasBomb || (minesField.isWinner() && !stop)) {
-        gameOver();
+      if (cell.hasBomb) {
+        gameOver(false);
+      } else if (minesField.isWinner() && gameState === gameStates.playing) {
+        gameOver(true);
       }
     };
 
     const firstClick = (callback) => {
-      onFirstClick(() => {
-        minesField.createField(rows, cols, bombs, index);
-        callback();
-      });
+      onFirstClick();
+      minesField.createField(rows, cols, bombs, index);
+      callback();
     };
 
     return (
       <Cell
-        stop={stop}
         bombs={cell.bombsAround}
         hasBomb={cell.hasBomb}
         setBombs={setBombs}
         activated={cell.activated}
+        gameState={gameState}
         stepOnCell={stepOnCell}
         firstClick={firstClick}
         key={index}

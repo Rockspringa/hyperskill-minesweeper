@@ -1,37 +1,36 @@
 import React, { useEffect, useState } from "react";
 
-let secondsTimer;
-let minutesTimer;
+import gameStates from "../../model/GameStates";
 
-const Timer = ({ stopped, defaultState }) => {
-  const [seconds, setSeconds] = useState(0);
-  const [minutes, setMinutes] = useState(0);
+let interval;
+
+const Timer = ({ gameState }) => {
+  const [timer, setTimer] = useState({ sec: 0, min: 0 });
 
   useEffect(() => {
-    if (!stopped) {
-      secondsTimer = setInterval(() => setSeconds((sec) => sec + 1), 1000);
-      minutesTimer = setInterval(() => {
-        setMinutes((min) => min + 1);
-        setSeconds(0);
-      }, 60000);
+    if (gameState === gameStates.playing) {
+      interval = setInterval(
+        () =>
+          setTimer(({ sec, min }) =>
+            sec === 59 ? { sec: 0, min: min + 1 } : { sec: sec + 1, min }
+          ),
+        1000
+      );
     } else {
-      clearInterval(secondsTimer);
-      clearInterval(minutesTimer);
-      secondsTimer = undefined;
-      minutesTimer = undefined;
-    }
-  }, [stopped]);
+      interval = clearInterval(interval);
 
-  useEffect(() => {
-    if (defaultState) {
-      setSeconds(0);
-      setMinutes(0);
+      if (gameState === gameStates.default) {
+        setTimer({ sec: 0, min: 0 });
+      }
     }
-  }, [defaultState]);
+  }, [gameState]);
+
+  useEffect(() => {}, [gameState]);
 
   return (
     <p>
-      {minutes}:{seconds.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
+      {timer.min}:
+      {timer.sec.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
     </p>
   );
 };

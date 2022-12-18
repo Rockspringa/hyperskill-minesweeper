@@ -23,13 +23,19 @@ header {
     justify-content: space-between;
 }
 
+#info img {
+    border-radius: 50%;
+    box-shadow: 0 0 5px 2px rgb(136 34 34 / 40%),
+        inset 0 0 10px 5px rgb(136 34 34 / 60%);
+}
+
 img {
     height: 25px;
     margin: auto 10px;
     pointer-events: none;
 }
 
-img:not(.logo) {
+img.bombs-counter {
     height: 15px;
     margin: auto;
 }

@@ -5,53 +5,52 @@ import Header from "./components/Header";
 import Info from "./components/Info";
 import Field from "./components/game/Field";
 
+import gameStates from "./model/GameStates";
+
 const defaultBombs = 10;
 const defaultRows = 9;
 const defaultCols = 8;
 
 function App() {
-  const [defaultState, setDefaultState] = useState(true);
+  const [gameState, setGameState] = useState(gameStates.default);
   const [bombs, setBombs] = useState(defaultBombs);
-  const [stop, setStop] = useState(true);
   const [game, setGame] = useState(0);
 
   const resetGame = () => {
-    if (defaultState) {
+    if (gameState === gameStates.default) {
       return;
     }
-
-    setDefaultState(true);
+    setGameState(gameStates.default);
     setBombs(defaultBombs);
-    setStop(true);
     setGame((game) => game + 1);
   };
 
-  const beginGame = (callback) => {
-    if (!defaultState) {
+  const beginGame = () => {
+    if (gameState !== gameStates.default) {
       return;
     }
-    setDefaultState(false);
-    setStop(false);
-    callback();
+    setGameState(gameStates.playing);
+  };
+
+  const stopGame = (cleared) => {
+    if (gameState !== gameStates.playing) {
+      return;
+    }
+    setGameState(cleared ? gameStates.clear : gameStates.failed);
   };
 
   return (
     <>
       <Header />
-      <Info
-        stop={stop}
-        bombs={bombs}
-        resetGame={resetGame}
-        defaultState={defaultState}
-      />
+      <Info bombs={bombs} resetGame={resetGame} gameState={gameState} />
       <main>
         <Field
-          stop={stop}
           rows={defaultRows}
           cols={defaultCols}
           bombs={bombs}
-          gameOver={() => setStop(true)}
+          gameOver={stopGame}
           setBombs={setBombs}
+          gameState={gameState}
           onFirstClick={beginGame}
           key={game}
         />
