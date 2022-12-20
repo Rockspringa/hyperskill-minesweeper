@@ -1,72 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 
 import gameStates from "../../model/GameStates";
 import cellStates from "../../model/CellStates";
 
-const Cell = ({
-  bombs,
-  hasBomb,
-  setBombs,
-  activated,
-  gameState,
-  stepOnCell,
-  firstClick,
-}) => {
-  const [state, setState] = useState(cellStates.default);
-
-  if (state === cellStates.default && activated) {
-    setState(hasBomb ? cellStates.exploded : cellStates.activated);
-  }
-
+const Cell = ({ setBombs, boardCell, gameState, firstClick, refreshBoard }) => {
   const actionWrapper = (action) => {
     return (attributes) => {
+      const execute = () => action(attributes) || refreshBoard();
+
       if (gameState === gameStates.default) {
-        firstClick(() => action(attributes));
+        firstClick(execute);
         return;
       }
-      if (
-        gameState !== gameStates.playing ||
-        state === cellStates.exploded ||
-        state === cellStates.activated
-      ) {
+      if (gameState !== gameStates.playing || boardCell.activated) {
         return;
       }
-      action(attributes);
+      execute();
     };
   };
 
   const activate = actionWrapper(() => {
-    if (state === cellStates.flagged) {
+    if (boardCell.state === cellStates.flagged) {
       return;
     }
-
-    setState(hasBomb ? cellStates.exploded : cellStates.activated);
-    stepOnCell();
+    boardCell.activate();
   });
 
   const flag = actionWrapper((event) => {
     event.preventDefault();
 
-    let newState;
-
     setBombs((bombs) => {
-      if (state === cellStates.flagged) {
-        newState = cellStates.default;
-        return bombs + 1;
+      if (bombs > 0 && boardCell.state === cellStates.default) {
+        return bombs - boardCell.flag();
       }
-      if (bombs > 0) {
-        newState = cellStates.flagged;
-        return bombs - 1;
-      }
-      return bombs;
+      return bombs + boardCell.unflag();
     });
-
-    if (newState) setState(newState);
   });
 
   return (
-    <div className={state} onClick={activate} onContextMenu={flag}>
-      <h6>{state === cellStates.activated ? bombs || "" : ""}</h6>
+    <div className={boardCell.state} onClick={activate} onContextMenu={flag}>
+      <h6>{boardCell.bombs}</h6>
     </div>
   );
 };

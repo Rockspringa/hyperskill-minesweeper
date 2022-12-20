@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Cell from "./Cell";
 import "./Field.css";
 
-import MinesField from "../../model/MinesField";
+import Board from "../../model/Board";
 import gameStates from "../../model/GameStates";
 
 const Field = ({
@@ -15,35 +15,33 @@ const Field = ({
   gameState,
   onFirstClick,
 }) => {
-  const [minesField, setMinesField] = useState(new MinesField({ rows, cols }));
+  const [board, setBoard] = useState(new Board({ rows, cols }));
 
-  const cells = minesField.field.map((cell, index) => {
-    const stepOnCell = () => {
-      minesField.stepOnCell(index);
-      setMinesField((minesField) => new MinesField(minesField));
-
-      if (cell.hasBomb) {
+  const cells = board.cells.map((cell, index) => {
+    const refreshBoard = () => {
+      if (cell.hasBomb && cell.activated) {
         gameOver(false);
-      } else if (minesField.isWinner() && gameState === gameStates.playing) {
+      }
+      if (board.isWinner() && gameState === gameStates.playing) {
         gameOver(true);
       }
+
+      setBoard(new Board(board));
     };
 
     const firstClick = (callback) => {
       onFirstClick();
-      minesField.createField(rows, cols, bombs, index);
+      board.createField(rows, cols, bombs, index);
       callback();
     };
 
     return (
       <Cell
-        bombs={cell.bombsAround}
-        hasBomb={cell.hasBomb}
         setBombs={setBombs}
-        activated={cell.activated}
+        boardCell={cell}
         gameState={gameState}
-        stepOnCell={stepOnCell}
         firstClick={firstClick}
+        refreshBoard={refreshBoard}
         key={index}
       />
     );
